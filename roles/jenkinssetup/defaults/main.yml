@@ -1,0 +1,8 @@
+---
+# defaults file for /etc/ansible/roles/jenkinssetup
+jenkinserver:
+  baseserver: 18.221.253.101
+
+targetnodes:
+  - 3.19.245.242
+  - 3.144.182.37

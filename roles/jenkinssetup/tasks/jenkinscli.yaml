@@ -1,0 +1,10 @@
+---
+-
+     name: 'Download Jenkins-cli.jar'
+     amazon.aws.aws_s3:
+       aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+       aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+       bucket: sreejthpv
+       object: /sree/jenkins-cli.jar
+       dest: /home/ubuntu/jenkins-cli.jar
+       mode: get

@@ -1,0 +1,13 @@
+-
+  name: "Jenkins Setup Initialization"
+  hosts: mygroup
+  vars_prompt:
+    - name: username
+      prompt: " Enter the Username: "
+      private: no
+    - name: password
+      prompt: " Enter the Password "
+      private: no 
+  roles:
+    - jenkinssetup
+    

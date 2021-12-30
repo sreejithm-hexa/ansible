@@ -1,0 +1,7 @@
+---
+# vars file for /etc/ansible/roles/jenkinssetup
+jenkins:
+  repokey: 'https://pkg.jenkins.io/debian-stable/jenkins.io.key'
+  debianrepo: 'deb http://pkg.jenkins.io/debian-stable binary/'
+java:
+  args: JAVA_ARGS="-Djenkins.install.runSetupWizard=false"  

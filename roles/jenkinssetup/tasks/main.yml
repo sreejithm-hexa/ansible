@@ -1,0 +1,116 @@
+---
+# tasks file for /etc/ansible/roles/jenkinssetup
+-
+    name: 'Install Required Tools'
+    become: true
+    apt:
+      name: '{{ packages }}'
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+        - openjdk-11-jdk
+        - maven
+        - gradle
+        - pip
+-
+    name: 'Install boto3 and botocore'
+    pip:
+      name: "{{ items }}"
+      state: present
+    vars:
+      items:
+        - boto3
+        - botocore
+-
+    name: 'Add Jenkins repo key'
+    become: true
+    apt_key:
+      url: '{{ jenkins.repokey }}'
+      state: present
+-
+    name: 'Add debian repository'
+    become: true   
+    apt_repository:
+      repo: '{{ jenkins.debianrepo }}'
+      state: present
+-
+    name: 'Install Jenkins'
+    become: true
+    apt:
+      name: jenkins
+      state: present
+-
+    name: 'Update Cache'
+    become: true
+    apt:
+      update_cache: yes
+-
+    name: 'Open 8080 port for use'
+    become: true
+    community.general.ufw:
+      rule: allow
+      name: OpenSSH
+
+-
+    name: 'Disable jenkins setup wizard'
+    become: true
+    lineinfile:
+      path: /etc/default/jenkins
+      line: '{{ java.args }}'
+-
+    name: "Creating admin user file"
+    become: true
+    file:
+      path: /var/lib/jenkins/init.groovy.d/
+      state: directory
+-
+    name: "Copying the admin creation file"
+    become: true
+    copy:
+      src: /etc/ansible/roles/jenkinssetup/files/basic-security.groovy
+      dest: /var/lib/jenkins/init.groovy.d/
+      mode: '0777'
+-
+    name: 'restart jenkins'
+    become: true
+    ansible.builtin.service:
+      name: jenkins
+      state: restarted
+-
+    import_tasks: jenkinscli.yaml
+-
+    name: 'download the jenkins plugin manager'
+    shell: |
+      wget https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.11.1/jenkins-plugin-manager-2.11.1.jar
+
+-
+    name: 'copying the plugins file'
+    copy:
+      src: /etc/ansible/roles/jenkinssetup/files/plugins.txt
+      dest: /home/ubuntu/
+-
+    name: 'copying the jenkins configuration'
+    copy:
+      src: /etc/ansible/roles/jenkinssetup/files/jenkins.yaml
+      dest: /home/ubuntu/
+-
+    name: 'Install the plugins'
+    become: true
+    shell: |
+      java -jar jenkins-plugin-manager-*.jar --war /usr/share/jenkins/jenkins.war --plugin-file plugins.txt -d /var/lib/jenkins/plugins/
+
+-
+    name: 'Restart the jenkins service'
+    become: true
+    service:
+      name: jenkins
+      state: restarted
+- 
+    import_tasks: jenkinsconfig.yaml
+-
+    name: ' Restart the jenkins service'
+    become: true
+    service:
+      name: jenkins
+      state: restarted

@@ -1,0 +1,11 @@
+---
+
+-
+    name: 'configure the jenkins server'
+    shell: |
+      java -jar jenkins-cli.jar -s http://{{ item }}:8080/ -auth {{ username }}:{{ password }} apply-configuration < jenkins.yaml
+    retries: 5
+    delay: 5
+    register: result
+    until: result is succeeded
+    loop: "{{ targetnodes }}"

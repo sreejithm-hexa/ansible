@@ -1,0 +1,67 @@
+jenkins:
+  systemMessage: "TEST CONFIG"
+  numExecutors: 3
+  quietPeriod: 5
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+  disableRememberMe: false
+  mode: NORMAL
+
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+      - id: "sreejth"
+        name: "Sreejith M"
+        password: "sreejith"
+        properties:
+        - mailer:
+            emailAddress: "sreejth@gmail.com"
+      - id: "abi"
+        name: "ABI"
+        password: "abishek"
+        properties:
+          - mailer:
+              emailAddress: "abi@gamil.com"
+
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+
+tool:
+  git:
+    installations:
+      - name: default
+        home: "git"
+  maven:
+    installations:
+      - name: maven
+        home: "/usr/share/maven"
+  jdk:
+    installations:
+      - name: jdk
+        home: "/usr/lib/jvm/java-11-openjdk-amd64"
+  gradle:
+    installations:
+      - name: gradle
+        home: "/usr/share/gradle"
+
+
+unclassified:
+  globalLibraries:
+    libraries:
+      - name: "Shared-Library"
+        defaultVersion: "main"
+        implicit: false
+        retriever:
+          modernSCM:
+            scm:
+              git:
+                remote: "https://HexOne@dev.azure.com/HexOne/PV/_git/Shared-Library"
+                traits:
+                  - gitBranchDiscovery
